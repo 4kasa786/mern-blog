@@ -7,12 +7,23 @@ export const signup = async (req, res, next) => {
     if (!username || !email || !password || username === '' || email === '' || password === '') {
         return next(errorHandler(400, "All fields are required"));
     }
+
+    //check if user already exists
+    let checkUser = await User.findOne({ email });
+
+    if (checkUser) {
+        return next(errorHandler(400, "User already exists"));
+    }
+    checkUser = await User.findOne({ username });
+    if (checkUser) {
+        return next(errorHandler(400, "User already exists"));
+    }
     const hashedPassword = bcryptjs.hashSync(password, 10)
     const newUser = new User({ username, email, password: hashedPassword });
 
     try {
         await newUser.save();
-        return res.json({ message: "User singup successfull" });
+        return res.json({ message: "User signup successfull" });
     } catch (err) {
         next(err);
     }
