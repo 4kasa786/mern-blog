@@ -20,6 +20,16 @@ app.use(express.json());
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 
+app.use((err, req, res, next) => {
+    const statusCode = err.status || 500;
+    const message = err.message || "Internal Server Error";
+    res.status(statusCode).json({
+        success: false, //this is telling the client that the request was not successful
+        statusCode,
+        message,
+    })
+})
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000')
 })
