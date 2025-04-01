@@ -7,6 +7,7 @@ import SignUp from './Pages/SignUp'
 import Dashboard from './Pages/Dashboard'
 import Projects from './Pages/Projects'
 import Header from './components/Header'
+import FooterComponent from './components/FooterComponent'
 
 function App() {
 
@@ -20,9 +21,8 @@ function App() {
         <Route path='/sign-up' element={<SignUp />}></Route>
         <Route path='/dashboard' element={<Dashboard />}></Route>
         <Route path='/projects' element={<Projects />}></Route>
-
-
       </Routes>
+      <FooterComponent />
     </BrowserRouter >
   )
 }

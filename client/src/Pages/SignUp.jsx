@@ -64,7 +64,7 @@ const SignUp = () => {
                 <div className='flex-1'>
                     <form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
                         <div className=''>
-                            <Label className='text-sm md:text-lg font-normal'>Your Username</Label>
+                            <Label className='text-sm md:text-lg font-normal'> Username</Label>
                             <TextInput type='text' placeholder='Username'
                                 {...register('username', {
                                     required: "Username is required",
@@ -75,7 +75,7 @@ const SignUp = () => {
 
                         </div>
                         <div>
-                            <Label className=' text-sm md:text-lg font-normal' >Your Email</Label>
+                            <Label className=' text-sm md:text-lg font-normal' > Email</Label>
                             <TextInput type='email' placeholder='Email'
                                 {...register('email', {
                                     required: "Email is required",
@@ -85,7 +85,7 @@ const SignUp = () => {
 
                         </div>
                         <div>
-                            <Label className=' text-sm md:text-lg font-normal' >Your Password</Label>
+                            <Label className=' text-sm md:text-lg font-normal' > Password</Label>
                             <TextInput type='password' placeholder='Password'
                                 {...register('password', {
                                     required: "Password is required",
