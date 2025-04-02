@@ -2,11 +2,14 @@ import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { signInStart, signInFailure, signInSuccess } from '../redux/user/userSlice'
 
 const SignIn = () => {
 
-    const [errorMessage, setErrorMessage] = useState('');
-    const [loading, setLoading] = useState(false);
+    const { loading } = useSelector((state) => state.user)
+    const { error: errorMessage } = useSelector((state) => state.user)
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -16,9 +19,8 @@ const SignIn = () => {
     })
 
     const onSubmit = async (formData) => {
-        console.log(formData);
-        setLoading(true);
-        setErrorMessage('');
+        // console.log(formData); 
+        dispatch(signInStart());
         // await new Promise((resolve, reject) => { setTimeout(resolve, 4000) });//this is just for testing purpose to show the loading state
         try {
             const response = await fetch('/api/auth/signin', {
@@ -30,18 +32,17 @@ const SignIn = () => {
             })
             const data = await response.json();
             if (data.success === false) {
-                setErrorMessage(data.message);
-                setLoading(false);
+                dispatch(signInFailure(data.message));
                 return;
             }
-            setLoading(false);
+
             if (response.ok) {
+                dispatch(signInSuccess(data))
                 navigate('/');
             }
 
         } catch (error) {
-            setErrorMessage(error.message);
-            setLoading(false);
+            dispatch(signInFailure(error.message));
 
         }
 
