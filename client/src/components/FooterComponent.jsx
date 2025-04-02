@@ -17,7 +17,7 @@ const FooterComponent = () => {
                             Blog
                         </Link>
                     </div>
-                    <div className='grid grid-cols-2 gap-8 place-items-center place-content-center  mt-4 sm:grid-cols-3 sm:gap-6'>
+                    <div className='grid grid-cols-2 gap-8   mt-4 sm:grid-cols-3 sm:gap-6'>
                         <div>
                             <FooterTitle title='About' />
                             <FooterLinkGroup col>
