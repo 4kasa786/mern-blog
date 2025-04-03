@@ -8,8 +8,8 @@ import { signInStart, signInFailure, signInSuccess } from '../redux/user/userSli
 
 const SignUp = () => {
 
-    const { loading } = useSelector((state) => state.user.user);
-    const { error: errorMessage } = useSelector((state) => state.user.user);
+    const { loading } = useSelector((state) => state.user);
+    const { error: errorMessage } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm({
