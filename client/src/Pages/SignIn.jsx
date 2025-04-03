@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { signInStart, signInFailure, signInSuccess } from '../redux/user/userSlice'
+import OAuth from '../components/OAuth'
 
 const SignIn = () => {
 
@@ -98,6 +99,7 @@ const SignIn = () => {
                                 </>
                             ) : 'Sign In'}
                         </Button>
+                        <OAuth />
                     </form>
                     <div className='text-sm gap-2 mt-5'>
                         <span>Create an Account?</span>
