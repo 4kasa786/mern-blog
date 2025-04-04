@@ -27,12 +27,8 @@ const FooterComponent = () => {
                                     rel='noopener noreferrer'
                                 >100 Js Projects
                                 </FooterLink>
-                                <FooterLink
-                                    href="/about"
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                >Kasa's Blog
-                                </FooterLink>
+                                <Link to='/about' className='hover:underline'>Kasa's Blog</Link>
+
                             </FooterLinkGroup>
                         </div>
                         <div>

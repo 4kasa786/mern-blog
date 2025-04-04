@@ -36,7 +36,7 @@ const Header = () => {
             </Button>
             <div className='flex gap-2 md:order-2'>
                 <Button
-                    className="w-12 h-10 rounded-3xl flex items-center justify-center border-1 border-black-100 bg-gray-400 dark:bg-gray-700"
+                    className="w-12 h-10 rounded-3xl flex items-center justify-center border border-1 border-black-100 bg-gray-400 dark:bg-gray-700"
                     onClick={() => dispatch(toggleTheme())}
                 >
                     <div className="flex items-center justify-center">
