@@ -49,10 +49,10 @@ const SignUp = () => {
     }
 
     return (
-        <div className='min-h-screen mt-20' >
-            <div className='flex p-3 gap-5 max-w-3xl mx-auto flex-col md:flex-row md:items-center'>
+        <div className='min-h-screen flex  my-auto' >
+            <div className='flex p-3  gap-5 max-w-3xl mx-auto flex-col md:flex-row md:items-center'>
                 {/* left side */}
-                <div className='flex-1'>
+                <div className='flex-1 '>
                     <Link to='/' className='font-bold
          dark:text-white text-5xl'>
                         <span className='px-2 py-1 bg-gradient-to-r from-indigo-500
@@ -62,7 +62,7 @@ const SignUp = () => {
                     <p className='text-lg font-normal mt-5'>This is a demo Project. You can signup with your email and password or with Google </p>
                 </div>
                 {/* right side */}
-                <div className='flex-1'>
+                <div className='flex-1 '>
                     <form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
                         <div className=''>
                             <Label className='text-sm md:text-lg font-normal'> Username</Label>
@@ -99,7 +99,7 @@ const SignUp = () => {
                             {errors.password && <span className='text-red-500' >{errors.password.message}</span>}
 
                         </div>
-                        <Button type='submit' className="bg-gradient-to-r from-purple-500 to-pink-500 text-lg text-white hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800"
+                        <Button type='submit' className="my-3 bg-gradient-to-r from-purple-500 to-pink-500 text-lg text-white hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800"
                             disabled={loading}>
                             {loading ? (
                                 <>

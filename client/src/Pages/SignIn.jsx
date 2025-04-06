@@ -50,7 +50,7 @@ const SignIn = () => {
     }
 
     return (
-        <div className='min-h-screen mt-20' >
+        <div className='min-h-screen md:flex mt-auto mx-auto' >
             <div className='flex p-3 gap-5 max-w-3xl mx-auto flex-col md:flex-row md:items-center'>
                 {/* left side */}
                 <div className='flex-1'>
@@ -90,7 +90,7 @@ const SignIn = () => {
                             {errors.password && <span className='text-red-500' >{errors.password.message}</span>}
 
                         </div>
-                        <Button type='submit' className="bg-gradient-to-r from-purple-500 to-pink-500 text-lg text-white hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800"
+                        <Button type='submit' className=" my-3 bg-gradient-to-r from-purple-500 to-pink-500 text-lg text-white hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800"
                             disabled={loading}>
                             {loading ? (
                                 <>
