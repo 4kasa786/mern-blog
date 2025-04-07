@@ -13,7 +13,7 @@ const Header = () => {
     const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch()
     const profilePicture = currentUser?.profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    console.log(currentUser);
+    // console.log(currentUser);
     const { theme } = useSelector((state) => state.theme);
     return (
         <Navbar className='border-b-2  '>
