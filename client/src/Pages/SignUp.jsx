@@ -21,7 +21,7 @@ const SignUp = () => {
     })
 
     const onSubmit = async (formData) => {
-        dispatch(signInStart());
+        // dispatch(signInStart());
         // await new Promise((resolve, reject) => { setTimeout(resolve, 4000) });//this is just for testing purpose to show the loading state
         try {
             const response = await fetch('/api/auth/signup', {
@@ -33,16 +33,16 @@ const SignUp = () => {
             })
             const data = await response.json();
             if (data.success === false) {
-                dispatch(signInFailure(data.message));
+                // dispatch(signInFailure(data.message));
                 return;
             }
             if (response.ok) {
-                dispatch(signInSuccess(data))
+                // dispatch(signInSuccess(data))
                 navigate('/sign-in');
             }
 
         } catch (error) {
-            dispatch(signInFailure(error.message));
+            // dispatch(signInFailure(error.message));
 
         }
 

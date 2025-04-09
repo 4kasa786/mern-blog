@@ -7,9 +7,9 @@ export const test = (req, res) => {
 }
 
 export const updateUser = async (req, res, next) => {
-    console.log(req.user);
-    console.log(req.body);
-    console.log(req.params.username);
+    // console.log(req.user);
+    // console.log(req.body);
+    // console.log(req.params.username);
     if (req.user.id != req.params.userId) {
         return next(errorHandler(403, "You are not allowed to update this user"));
     }
@@ -35,13 +35,9 @@ export const updateUser = async (req, res, next) => {
             return next(errorHandler(400, "Username can only contain letter and numbers"));
         }
 
-        const findUser = await User.findOne({ username: req.body.username });
-        if (findUser) {
-            return next(errorHandler(400, "Username already exists"));
-        }
     }
     try {
-        const { userId } = req.params;
+
         const updatedUser = await User.findByIdAndUpdate(req.params.userId, {
             $set: {
                 username: req.body.username,
@@ -55,6 +51,7 @@ export const updateUser = async (req, res, next) => {
         return res.status(200).json(rest);
     }
     catch (error) {
+        next(errorHandler(500, "Error updating user"));
 
     }
 }
