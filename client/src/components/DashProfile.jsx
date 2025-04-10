@@ -9,11 +9,13 @@ import { useForm } from 'react-hook-form'
 import { updateStart, updateFailure, updateSuccess, deleteUserStart, deleteUserFailure, deleteUserSuccess, signOutSuccess } from '../redux/user/userSlice'
 import { useDispatch } from 'react-redux'
 import { HiOutlineExclamationCircle } from 'react-icons/hi2'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 
 
 const DashProfile = () => {
-    const { currentUser, error } = useSelector((state) => state.user)
+    const { currentUser, error, loading } = useSelector((state) => state.user)
     const [imageFile, setImageFile] = useState(null);
     const [imageFileUrl, setImageFileUrl] = useState(null);
     const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -24,6 +26,7 @@ const DashProfile = () => {
     const [showModal, setShowModal] = useState(false);
     const filePickerRef = useRef();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({
@@ -128,7 +131,7 @@ const DashProfile = () => {
         setUpdateUserSuccess(null);
         setUpdateUserError(null);
         if (!formData.password || formData.password.trim === '') {
-            return;
+            delete formData.password;
         }
 
 
@@ -201,6 +204,8 @@ const DashProfile = () => {
             }
             else {
                 dispatch(signOutSuccess());
+                navigate('/sign-in');
+
             }
 
         } catch (error) {
@@ -270,7 +275,7 @@ const DashProfile = () => {
                 {errors.email && (<span className='text-red-500'>{errors.email.message}</span>)}
                 <TextInput type='password' id='password' placeholder='password'
                     {...register('password', {
-                        required: true,
+                        required: false,
                         minLength: {
                             value: 6,
                             message: "Password must be at least 6 characters long"
@@ -285,14 +290,29 @@ const DashProfile = () => {
 
                 />
                 {errors.password && (<span className='text-red-500'>{errors.password.message}</span>)}
-                <Button type='submit' className="bg-gradient-to-br from-purple-600 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-blue-300 dark:focus:ring-blue-800">Update</Button>
+                <Button type='submit'
+                    disabled={loading || imageFileUploading}
+                    className="bg-gradient-to-br from-purple-600 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-blue-300 dark:focus:ring-blue-800">
+                    {(loading || imageFileUploading) ? "Loading..." : "Update       "}
+                </Button>
+                {currentUser.isAdmin && (
+                    <Link to='/create-post'>
+                        <Button type='button'
+                            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800 w-full"
+                        >
+                            Create a Post
+                        </Button>
+                    </Link>
+
+
+                )}
 
             </form >
             <div className='text-red-500 flex justify-between mt-5'>
                 <span onClick={() => setShowModal(true)} className='cursor-pointer'>Delete Account</span>
                 <span
                     onClick={handleSignOut}
-                    className='cursor pointer'>Sign Out</span>
+                    className='cursor-pointer'>Sign Out</span>
 
             </div>
             {updateUserSuccess && (
