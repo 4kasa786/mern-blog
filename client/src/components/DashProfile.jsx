@@ -119,6 +119,8 @@ const DashProfile = () => {
                     setImageFileUrl(downloadURL);
                     setValue('profilePicture', downloadURL);
                     setImageFileUploading(false);
+                    setImageFileUploadProgress(null);
+                    setImageFileUploadError(null);
                 })
             }
         )
