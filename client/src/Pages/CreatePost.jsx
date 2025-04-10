@@ -11,7 +11,7 @@ const CreatePost = () => {
 
             <form className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-4 sm:flex-row justify-between'>
-                    <TextInput type='text' placeholder='Title ' required
+                    <TextInput type='text' placeholder='Title' required
                         className='flex-1'
                     />
                     <Select >
