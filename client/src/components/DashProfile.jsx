@@ -6,7 +6,7 @@ import { app } from '../firebase'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useForm } from 'react-hook-form'
-import { updateStart, updateFailure, updateSuccess, deleteUserStart, deleteUserFailure, deleteUserSuccess } from '../redux/user/userSlice'
+import { updateStart, updateFailure, updateSuccess, deleteUserStart, deleteUserFailure, deleteUserSuccess, signOutSuccess } from '../redux/user/userSlice'
 import { useDispatch } from 'react-redux'
 import { HiOutlineExclamationCircle } from 'react-icons/hi2'
 
@@ -50,13 +50,30 @@ const DashProfile = () => {
     useEffect(() => {
         if (updateUserSuccess) {
             const timer = setTimeout(() => {
-                setUpdateUserSuccess('');
+                setUpdateUserSuccess(null);
             }, 5000);
 
-            // Cleanup timer on component unmount or when updateUserSuccess changes
             return () => clearTimeout(timer);
         }
     }, [updateUserSuccess]);
+
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                dispatch(updateFailure(''));
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [error]);
+
+    useEffect(() => {
+        if (updateUserError) {
+            const timer = setTimeout(() => {
+                setUpdateUserError(null);
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [updateUserError]);
 
     useEffect(() => {
         if (imageFile) {
@@ -109,6 +126,7 @@ const DashProfile = () => {
     const onSubmit = async (formData) => {
         // console.log(formData);
         setUpdateUserSuccess(null);
+        setUpdateUserError(null);
         if (!formData.password || formData.password.trim === '') {
             return;
         }
@@ -128,7 +146,7 @@ const DashProfile = () => {
             if (!response.ok) {
                 dispatch(updateFailure(data.message));
                 // console.log("This is from failure");
-                setUpdateUserError(data.message);
+                // setUpdateUserError(data.message);
 
                 return;
             }
@@ -169,6 +187,25 @@ const DashProfile = () => {
 
         }
 
+    }
+
+    const handleSignOut = async () => {
+        try {
+
+            const response = await fetch('/api/user/signout', {
+                method: 'POST',
+            })
+            const data = await response.json();
+            if (!response.ok) {
+                console.log(data.message);
+            }
+            else {
+                dispatch(signOutSuccess());
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
     return (
@@ -253,7 +290,9 @@ const DashProfile = () => {
             </form >
             <div className='text-red-500 flex justify-between mt-5'>
                 <span onClick={() => setShowModal(true)} className='cursor-pointer'>Delete Account</span>
-                <span className='cursor pointer'>Sign Out</span>
+                <span
+                    onClick={handleSignOut}
+                    className='cursor pointer'>Sign Out</span>
 
             </div>
             {updateUserSuccess && (
