@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import DashProfile from '../components/DashProfile'
-import DashSidebar from '../components/DashSidebar'
+import DashSidebar from '../components/DashSideBar'
+import DashPosts from '../components/DashPosts'
 
 const Dashboard = () => {
     const location = useLocation()
@@ -11,7 +12,7 @@ const Dashboard = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
         // console.log(urlParams)
-        const tabfromUrl = urlParams.get('tab'); //here tab is the name of the query parameter in the url.
+        const tabfromUrl = urlParams.get('tab'); //here tab is the name of the query paraeter in the url.
         // console.log(tabfromUrl);
         if (tabfromUrl) {
             setTab(tabfromUrl);
@@ -26,6 +27,9 @@ const Dashboard = () => {
             </div>
             {/* {profile} */}
             {tab === 'profile' && <DashProfile />}
+
+            {/* {posts} */}
+            {tab === 'posts' && <DashPosts />}
 
         </div>
     )
