@@ -36,6 +36,7 @@ export const getPosts = async (req, res, next) => {
         const limit = parseInt(req.query.limit || 9);
         const sortDirection = req.query.sort === 'asc' ? 1 : -1;
 
+
         // Create a query object first
         let query = {};
 
@@ -52,6 +53,7 @@ export const getPosts = async (req, res, next) => {
         }
 
         // Execute the query with the properly formed query object
+
         const posts = await Post.find(query)
             .sort({ updatedAt: sortDirection })
             .skip(startIndex)
