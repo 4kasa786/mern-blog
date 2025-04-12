@@ -6,6 +6,29 @@ import { Link } from 'react-router-dom';
 const DashPosts = () => {
     const { currentUser } = useSelector((state) => state.user);
     const [userPosts, setUserPosts] = useState([]);
+    const [showMore, setShowMore] = useState(true);
+
+    const handleShowMore = async () => {
+        const startIndex = userPosts.length;
+        console.log(startIndex);
+        try {
+            const response = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+            const data = await response.json();
+            if (response.ok) {
+                setUserPosts((prev) => {
+                    return [...prev, ...data.posts]
+                })
+                if (data.posts.length < 9) {
+                    setShowMore(false);
+                }
+
+
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
 
@@ -14,9 +37,13 @@ const DashPosts = () => {
             try {
                 const response = await fetch(`api/post/getposts?userId=${currentUser._id}`);
                 const data = await response.json();
-                // console.log(data);
+                console.log(data);
                 if (response.ok) {
                     setUserPosts(data.posts);
+                    if (data.posts.length < 9) {
+                        setShowMore(false);
+                    }
+
 
 
                 }
@@ -97,6 +124,19 @@ const DashPosts = () => {
                             })}
                         </TableBody>
                     </Table>
+                    {showMore && (
+                        <div className='w-full flex justify-center mt-4'>
+                            <button
+                                onClick={handleShowMore}
+                                className={` px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 
+                            text-blue-600 bg-white border border-blue-200 hover:bg-blue-50 shadow-sm
+                            dark:text-blue-400 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700
+                          `}
+                            >
+                                Show More
+                            </button>
+                        </div>
+                    )}
                 </>
             ) : (
                 <p>You have no Post yet!</p>
