@@ -1,27 +1,28 @@
 import { Table, TableHead, TableBody, TableCell, TableHeadCell, TableRow, Modal, ModalHeader, ModalBody, Button } from 'flowbite-react';
 import React, { useEffect, useState } from 'react'
+import { FaCheck, FaTimes } from 'react-icons/fa';
 import { HiOutlineExclamationCircle } from 'react-icons/hi2';
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 
-const DashPosts = () => {
+const DashUsers = () => {
     const { currentUser } = useSelector((state) => state.user);
-    const [userPosts, setUserPosts] = useState([]);
+    const [users, setUsers] = useState([]);
     const [showMore, setShowMore] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    const [postIdToDelete, setPostIdToDelete] = useState('');
+    const [userIdToDelete, setUserIdToDelete] = useState('');
 
     const handleShowMore = async () => {
-        const startIndex = userPosts.length;
+        const startIndex = users.length;
         console.log(startIndex);
         try {
-            const response = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+            const response = await fetch(`/api/user/getusers?startIndex=${startIndex}`);
             const data = await response.json();
             if (response.ok) {
-                setUserPosts((prev) => {
-                    return [...prev, ...data.posts]
+                setUsers((prev) => {
+                    return [...prev, ...data.users]
                 })
-                if (data.posts.length < 9) {
+                if (data.users.length < 9) {
                     setShowMore(false);
                 }
 
@@ -33,38 +34,21 @@ const DashPosts = () => {
         }
     }
 
-    const handleDeletePost = async () => {
-        setShowModal(false);
-        try {
-            const response = await fetch(`/api/post/deletepost/${postIdToDelete}/${currentUser._id}`, {
-                method: 'DELETE',
-            })
-            const data = await response.json();
-            if (!response.ok) {
-                console.log(data.message);
-            }
-            else {
-                setUserPosts((prev) => {
-                    return prev.filter((post) => post._id !== postIdToDelete); //filter out the post form the userPosts array
-                    //so that the rerender of the component is triggered.
-                })
-            }
-        }
-        catch (error) {
-            console.log(error.message);
-        }
+    const handleDeleteUser = async () => {
 
     }
 
+
+
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchUsers = async () => {
             try {
-                const response = await fetch(`api/post/getposts?userId=${currentUser._id}`);
+                const response = await fetch(`api/user/getusers`);
                 const data = await response.json();
                 // console.log(data);
                 if (response.ok) {
-                    setUserPosts(data.posts);
-                    if (data.posts.length < 9) {
+                    setUsers(data.users);
+                    if (data.users.length < 9) {
                         setShowMore(false);
                     }
 
@@ -79,7 +63,7 @@ const DashPosts = () => {
 
         }
 
-        if (currentUser.isAdmin) fetchPosts();
+        if (currentUser.isAdmin) fetchUsers();
     }, [currentUser._id])
 
     return (
@@ -87,67 +71,54 @@ const DashPosts = () => {
         <div
             className='table-auto overflow-x-scroll md:mx-auto  w-full p-3 scrollbar
           scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700
-          dark:scrollbar-thumb-slate-500'
+          dark:scrollbar-thumb-slate-500 '
         >
-            {currentUser.isAdmin && userPosts.length > 0 ? (
+            {currentUser.isAdmin && users.length > 0 ? (
                 <>
                     <Table hoverable className='shadow-md'>
                         <TableHead>
-                            <TableRow>
-                                <TableHeadCell>Date Updated</TableHeadCell>
-                                <TableHeadCell>Post Image</TableHeadCell>
-                                <TableHeadCell>Post Title</TableHeadCell>
-                                <TableHeadCell>Category</TableHeadCell>
+                            <TableRow className=''>
+                                <TableHeadCell>Date created</TableHeadCell>
+                                <TableHeadCell>User Image</TableHeadCell>
+                                <TableHeadCell>Username</TableHeadCell>
+                                <TableHeadCell>Email</TableHeadCell>
+                                <TableHeadCell>Admin</TableHeadCell>
                                 <TableHeadCell>Delete</TableHeadCell>
-                                <TableHeadCell>
-                                    <span>Edit</span>
-                                </TableHeadCell>
                             </TableRow>
                         </TableHead>
                         <TableBody className='divide-y'>
-                            {userPosts.map((post) => {
+                            {users.map((user) => {
                                 return (
-                                    <TableRow key={post._id}
+                                    <TableRow key={user._id}
                                         className='bg-white dark:border-gray-700 dark:bg-gray-800'
                                     >
-                                        <TableCell>{new Date(post.updatedAt).toLocaleDateString()}</TableCell>
+                                        <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
                                         <TableCell >
-                                            <Link to={`/post/${post.slug}`}
-                                            >
-                                                <img src={post.image} alt={post.title}
-                                                    className='w-20 h-50 object-cover  bg-gray-500'
-                                                />
-                                            </Link>
+
+                                            <img src={user.profilePicture} alt={user.username}
+                                                className='w-10 h-10 object-cover rounded-full  bg-gray-500'
+                                            />
+
                                         </TableCell>
                                         <TableCell>
-                                            <Link
-                                                className='font-medium text-gray-900 dark:text-white'
-                                                to={`/post/${post.slug}`}>{post.title}</Link>
+                                            {user.username}
                                         </TableCell>
-                                        <TableCell>{post.category}</TableCell>
+                                        <TableCell>{user.email}</TableCell>
+                                        <TableCell>{user.isAdmin ? (<FaCheck className='text-green-500' />) : (<FaTimes className='text-red-500' />)}</TableCell>
                                         <TableCell>
                                             <span className='font-medium text-red-500 hover:underline
                                              cursor-pointer
                                             '
                                                 onClick={() => {
                                                     setShowModal(true);
-                                                    setPostIdToDelete(post._id);
+                                                    setUserIdToDelete(user._id);
                                                 }}
                                             >
                                                 Delete
                                             </span>
                                         </TableCell>
-                                        <TableCell>
-                                            <Link
-                                                className='text-teal-500 
-                                                hover:underline'
-                                                to={`/update-post/${post._id}`}>
-                                                <span>
-                                                    Edit
-                                                </span>
-                                            </Link>
 
-                                        </TableCell>
+
 
                                     </TableRow>
                                 )
@@ -169,7 +140,7 @@ const DashPosts = () => {
                     )}
                 </>
             ) : (
-                <p>You have no Post yet!</p>
+                <p>You have no users yet!</p>
             )
             }
             <Modal show={showModal} onClose={() => setShowModal(false)}
@@ -179,11 +150,11 @@ const DashPosts = () => {
                 <ModalBody>
                     <div className="text-center">
                         <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
-                        <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Are You Sure You want to delete this Post?</h3>
+                        <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Are You Sure You want to delete this user?</h3>
                     </div>
                     <div className='flex justify-center gap-4'>
                         <Button className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 text-white hover:bg-gradient-to-br focus:ring-red-300 dark:focus:ring-red-800"
-                            onClick={handleDeletePost}>
+                            onClick={handleDeleteUser}>
                             Yes, I'm sure
                         </Button>
                         <Button
@@ -200,4 +171,4 @@ const DashPosts = () => {
 
 }
 
-export default DashPosts 
+export default DashUsers 

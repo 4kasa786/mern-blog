@@ -1,7 +1,7 @@
 
 import { Avatar, Sidebar, SidebarItem, SidebarItemGroup } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
-import { HiDocumentText, HiUser } from 'react-icons/hi2'
+import { HiDocumentText, HiUser, HiOutlineUserGroup } from 'react-icons/hi2'
 import { HiArrowRight } from 'react-icons/hi2'
 import { Link, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -61,7 +61,17 @@ const DashSidebar = () => {
                         as={Link}
                         to='/dashboard?tab=posts'
                         className={`${tab == 'posts' ? 'ring-2 ring-blue-500' : ''}`}
-                        active={tab == 'posts'} icon={HiDocumentText}>Posts
+                        active={tab == 'posts'} icon={HiDocumentText}>
+                        Posts
+                    </SidebarItem>
+                )}
+                {currentUser?.isAdmin && (
+                    <SidebarItem
+                        as={Link}
+                        to='/dashboard?tab=users'
+                        className={`${tab == 'users' ? 'ring-2 ring-blue-500' : ''}`}
+                        active={tab == 'users'} icon={HiOutlineUserGroup}>
+                        Users
                     </SidebarItem>
                 )}
 
