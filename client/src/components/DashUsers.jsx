@@ -50,13 +50,13 @@ const DashUsers = () => {
                 setShowModal(false);
             }
             else {
-                console.log(error.message);
+                console.log(data.message);
 
             }
 
         }
         catch (error) {
-
+            console.log(error.message);
         }
 
     }
