@@ -14,12 +14,14 @@ import CreatePost from './Pages/CreatePost'
 import UpdatePost from './Pages/UpdatePost'
 import PostPage from './Pages/PostPage'
 import Post from '../../api/models/post.model'
+import ScrollToTop from './components/ScrollToTop'
 
 
 function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path='/' element={<Home />}></Route>
@@ -41,4 +43,4 @@ function App() {
   )
 }
 
-export default App
+export default App  
