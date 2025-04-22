@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
 
 
-const Comment = ({ comment, onLike, onEdit }) => {
+const Comment = ({ comment, onLike, onEdit, onDelete }) => {
 
     const [user, setUser] = useState({});
     const { currentUser } = useSelector((state) => state.user);
@@ -70,6 +70,10 @@ const Comment = ({ comment, onLike, onEdit }) => {
         }
     }
 
+    const handleDelete = async () => {
+        onDelete(comment._id);
+    }
+
     return (
         <div className='flex p-4 border-b dark:border-gray-600 text-sm '>
             <div className='flex-shrink-0 mr-3'>
@@ -131,13 +135,22 @@ const Comment = ({ comment, onLike, onEdit }) => {
                                 {comment.numberOfLikes > 0 && comment.numberOfLikes + " " + (comment.numberOfLikes === 1 ? "Like" : "Likes")}
                             </p>
                             {currentUser && (currentUser._id === comment.userId || currentUser.isAdmin) && (
-                                <button
-                                    type='button'
-                                    className='text-gray-500 hover:text-blue-500'
-                                    onClick={handleEdit}
-                                >
-                                    Edit
-                                </button>
+                                <>
+                                    <button
+                                        type='button'
+                                        className='text-gray-500 hover:text-blue-500'
+                                        onClick={handleEdit}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        type='button'
+                                        className='text-gray-500 hover:text-blue-500'
+                                        onClick={handleDelete}
+                                    >
+                                        Delete
+                                    </button>
+                                </>
                             )}
                         </div>
                     </>
