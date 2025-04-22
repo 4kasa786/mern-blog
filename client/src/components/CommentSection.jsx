@@ -9,6 +9,7 @@ const CommentSection = ({ postId }) => {
     const [comment, setComment] = useState('');
     const [commentError, setCommentError] = useState(null);
     const [comments, setComments] = useState([]);
+
     // console.log(comments);
     const navigate = useNavigate();
 
@@ -83,7 +84,18 @@ const CommentSection = ({ postId }) => {
         }
     };
 
+    const handleEdit = async (comment, editedContent) => {
+        setComments(comments.map((c) => {
+            if (c._id === comment._id) {
+                return {
+                    ...c,
+                    content: editedContent
+                }
+            }
+            return c
+        }))
 
+    }
 
     return (
         <div className='max-w-2xl mx-auto w-full p-3'>
@@ -145,6 +157,7 @@ const CommentSection = ({ postId }) => {
                             <Comment key={comment ? comment._id : index}
                                 comment={comment}
                                 onLike={handleLike}
+                                onEdit={handleEdit}
                             />
                         )
                     })}

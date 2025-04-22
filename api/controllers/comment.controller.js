@@ -61,3 +61,30 @@ export const likeComment = async (req, res, next) => {
         next(errorHandler(500, "Error while liking the comment"));
     }
 }
+
+export const editComment = async (req, res, next) => {
+    // console.log(req.params.commentId);
+    try {
+        const comment = await Comment.findById(req.params.commentId);
+        // console.log(comment);
+
+        if (!comment) {
+            return next(errorHandler(404, "Comment not found"));
+        }
+
+        if (comment.userId !== req.user && !req.user.isAdmin) {
+            return next(errorHandler(403, "You are not allowed to edit this comment"));
+        }
+
+        const editedComment = await Comment.findByIdAndUpdate(req.params.commentId,
+            {
+                content: req.body.content,
+            }, { new: true }
+        )
+
+        res.status(200).json(editedComment);
+
+    } catch (error) {
+        next(errorHandler(500, "Error while editing the comment"));
+    }
+}
