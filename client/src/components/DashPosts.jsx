@@ -115,7 +115,7 @@ const DashPosts = () => {
                                             <Link to={`/post/${post.slug}`}
                                             >
                                                 <img src={post.image} alt={post.title}
-                                                    className='w-20 h-50 object-cover  bg-gray-500'
+                                                    className='w-20 h-20 object-cover  bg-gray-500'
                                                 />
                                             </Link>
                                         </TableCell>
