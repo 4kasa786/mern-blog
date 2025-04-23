@@ -6,6 +6,7 @@ import { HiArrowRight } from 'react-icons/hi2'
 import { Link, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOutSuccess } from '../redux/user/userSlice'
+import { HiAnnotation } from 'react-icons/hi'
 
 const DashSidebar = () => {
     const location = useLocation()
@@ -63,6 +64,15 @@ const DashSidebar = () => {
                         className={`${tab == 'posts' ? 'ring-2 ring-blue-500' : ''}`}
                         active={tab == 'posts'} icon={HiDocumentText}>
                         Posts
+                    </SidebarItem>
+                )}
+                {currentUser?.isAdmin && (
+                    <SidebarItem
+                        as={Link}
+                        to='/dashboard?tab=comments'
+                        className={`${tab == 'comments' ? 'ring-2 ring-blue-500' : ''}`}
+                        active={tab == 'comments'} icon={HiAnnotation}>
+                        Comments
                     </SidebarItem>
                 )}
                 {currentUser?.isAdmin && (

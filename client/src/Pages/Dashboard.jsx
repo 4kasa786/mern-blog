@@ -5,6 +5,7 @@ import DashProfile from '../components/DashProfile'
 import DashSidebar from '../components/DashSideBar'
 import DashPosts from '../components/DashPosts'
 import DashUsers from '../components/DashUsers'
+import DashComment from '../components/DashComment'
 
 const Dashboard = () => {
     const location = useLocation()
@@ -13,7 +14,7 @@ const Dashboard = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
         // console.log(urlParams)
-        const tabfromUrl = urlParams.get('tab'); //here tab is the name of the query paraeter in the url.
+        const tabfromUrl = urlParams.get('tab'); //here tab is the name of the query parameter in the url.
         // console.log(tabfromUrl);
         if (tabfromUrl) {
             setTab(tabfromUrl);
@@ -34,6 +35,9 @@ const Dashboard = () => {
 
             {/* {users} */}
             {tab === 'users' && <DashUsers />}
+
+            {/* {comments} */}
+            {tab === 'comments' && <DashComment />}
 
         </div>
     )

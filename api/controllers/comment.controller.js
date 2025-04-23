@@ -108,3 +108,41 @@ export const deleteComment = async (req, res, next) => {
         next(errorHandler(500, "Error while deleting the comment"));
     }
 }
+
+export const getComments = async (req, res, next) => {
+
+    if (!req.user.isAdmin) {
+        return next(errorHandler(403, "You are not allowed to get all the comments"));
+    }
+    // console.log(req.user);
+    try {
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        const limit = parseInt(req.query.limit) || 9;
+        const sortDirection = req.query.sort === 'asc' ? 1 : -1;
+        const comments = await Comment.find()
+            .sort({ createdAt: sortDirection })
+            .skip(startIndex)
+            .limit(limit);
+        // console.log(comments);
+
+        const totalComments = await Comment.countDocuments();
+        // console.log(totalComments);
+        const now = new Date();
+        const oneMonthAgo = new Date(
+            now.getFullYear(),
+            now.getMonth() - 1,
+            now.getDate()
+        )
+
+        const lastMonthComments = await Comment.countDocuments({ createdAt: { $gte: oneMonthAgo } });
+        res.status(200).json({
+            comments,
+            totalComments,
+            lastMonthComments
+        });
+
+    } catch (error) {
+        console.log(error);
+        next(errorHandler(500, "Error while getting the comments"));
+    }
+}
