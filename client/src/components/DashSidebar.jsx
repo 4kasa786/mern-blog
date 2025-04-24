@@ -6,7 +6,7 @@ import { HiArrowRight } from 'react-icons/hi2'
 import { Link, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOutSuccess } from '../redux/user/userSlice'
-import { HiAnnotation } from 'react-icons/hi'
+import { HiAnnotation, HiChartPie } from 'react-icons/hi'
 
 const DashSidebar = () => {
     const location = useLocation()
@@ -53,6 +53,15 @@ const DashSidebar = () => {
         <Sidebar className='w-full md:w-56'>
 
             <SidebarItemGroup className='flex flex-col gap-1'>
+                {currentUser?.isAdmin && (
+                    <SidebarItem
+                        as={Link}
+                        to='/dashboard?tab=dash'
+                        className={`${tab == 'dash' ? 'ring-2 ring-blue-500' : ''}`}
+                        active={tab == 'dash' || !tab} icon={HiChartPie}>
+                        DashBoard
+                    </SidebarItem>
+                )}
                 <SidebarItem className={`${tab == 'profile' ? 'ring-2 ring-blue-500' : ''}`}
                     as={Link} to='/dashboard?tab=profile'
                     active={tab === 'profile'} icon={HiUser} label={`${currentUser?.isAdmin ? 'Admin' : 'User'}`} labelColor='dark'   >Profile</SidebarItem>
