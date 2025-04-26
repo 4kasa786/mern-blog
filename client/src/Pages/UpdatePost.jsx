@@ -16,13 +16,13 @@ const UpdatePost = () => {
     const [file, setFile] = useState(null);
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
-    const [formData, setFormData] = useState({
-        title: '',
-        category: 'uncategorized',
-        content: '',
-        image: '',
-    });
-    console.log(formData);
+    const [title, setTitle] = useState('');
+    const [category, setCategory] = useState('uncategorized');
+    const [content, setContent] = useState('');
+    const [image, setImage] = useState('');
+
+
+
     const [publishError, setPublishError] = useState(null);
 
     const navigate = useNavigate();
@@ -41,7 +41,10 @@ const UpdatePost = () => {
                 if (response.ok) {
                     // console.log(data.posts);
                     setPublishError(null);
-                    setFormData(data.posts[0]);
+                    setTitle(data.posts[0].title);
+                    setCategory(data.posts[0].category);
+                    setContent(data.posts[0].content);
+                    setImage(data.posts[0].image);
 
                 }
             }
@@ -79,7 +82,7 @@ const UpdatePost = () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                         setImageUploadProgress(null);
                         setImageUploadError(null);
-                        setFormData({ ...formData, image: downloadURL })
+                        setImage(downloadURL);
                     })
                 }
             )
@@ -98,12 +101,12 @@ const UpdatePost = () => {
         e.preventDefault();
         setPublishError(null); //reset the error state
         try {
-            const response = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
+            const response = await fetch(`/api/post/updatepost/${postId}/${currentUser._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ title, category, content, image }),
             })
             const data = await response.json();
             if (!response.ok) {
@@ -116,6 +119,7 @@ const UpdatePost = () => {
             }
         }
         catch (error) {
+            console.log(error)
             setPublishError("Something went wrong");
         }
     }
@@ -129,13 +133,13 @@ const UpdatePost = () => {
                 <div className='flex flex-col gap-4 sm:flex-row justify-between'>
                     <TextInput type='text' placeholder='Title' required
                         className='flex-1'
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        value={formData.title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        value={title}
 
                     />
                     <Select
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        value={formData.category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        value={category}
                     >
                         <option value='uncategorized'>Select a Category</option>
                         <option value='javascript'>Javascript</option>
@@ -164,10 +168,10 @@ const UpdatePost = () => {
                         {imageUploadError}
                     </Alert>
                 )}
-                {formData.image && (
+                {image && (
                     <div className='w-full h-72 border-4 border-teal-500 border-dotted p-3'>
                         <img
-                            src={formData?.image}
+                            src={image}
                             alt='upload'
                             className='w-full h-full object-contain'
                         />
@@ -175,8 +179,8 @@ const UpdatePost = () => {
                 )}
 
                 <ReactQuill theme='snow' placeholder="Write Something..." className='h-72 mb-12'
-                    onChange={(value) => setFormData({ ...formData, content: value })}
-                    value={formData.content}
+                    onChange={(value) => setContent(value)}
+                    value={content}
                 />
                 <Button type='submit' className="bg-gradient-to-r from-purple-500 to-pink-500 text-lg text-white hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800">
                     Update Post
@@ -191,4 +195,4 @@ const UpdatePost = () => {
     )
 }
 
-export default UpdatePost
+export default UpdatePost   

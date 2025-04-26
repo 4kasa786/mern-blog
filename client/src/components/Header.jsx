@@ -1,6 +1,7 @@
 import { Avatar, Button, Dropdown, DropdownDivider, DropdownHeader, DropdownItem, Navbar, NavbarCollapse, NavbarLink, NavbarToggle, TextInput } from 'flowbite-react'
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
@@ -11,12 +12,35 @@ import { signOutSuccess } from '../redux/user/userSlice'
 
 const Header = () => {
 
-    const { currentUser } = useSelector((state) => state.user);
+    const { currentUser } = useSelector((state) => state.user)
     const dispatch = useDispatch()
     const profilePicture = currentUser?.profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
     // console.log(currentUser);
     const { theme } = useSelector((state) => state.theme);
+    const [searchTerm, setSearchTerm] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
 
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        const searchTermFromUrl = urlParams.get('searchTerm');
+        if (searchTermFromUrl) {
+            setSearchTerm(searchTermFromUrl);
+        }
+
+
+    }, [location.search])
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('searchTerm', searchTerm);
+        urlParams.set('sort', 'desc');
+        urlParams.set('category', 'uncategorized');
+        const searchQuery = urlParams.toString();
+        navigate(`/search?${searchQuery}`);
+    }
 
     const handleSignOut = async () => {
         try {
@@ -45,12 +69,16 @@ const Header = () => {
                 via-purple-500 to-pink-500 rounded-lg text-white '>Kasa's</span>
                 Blog
             </Link>
-            <form >
+            <form
+                onSubmit={handleSubmit}
+            >
                 <TextInput
                     type='text'
                     placeholder='Search...'
                     rightIcon={AiOutlineSearch}
                     className='hidden lg:inline'
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </form>
             <Button className='w-12 h-10 p-0 lg:hidden rounded-full' color='light'>
